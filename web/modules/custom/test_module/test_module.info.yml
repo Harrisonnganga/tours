@@ -1,0 +1,5 @@
+name: "actic"
+description: "This is a test module"
+type: "module"
+package: "Training"
+core_version_requirement: ^9 || ^10

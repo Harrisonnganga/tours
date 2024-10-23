@@ -1,0 +1,16 @@
+name: 'RSVP List'
+type: module
+core_version_requirement: ^9 || ^10
+package: 'RSVP List'
+
+dependancies:
+ - drupal: block
+
+configure: rsvplist.admin_settings
+
+
+# name: "RSVP List"
+# description: "This is a rsvp module"
+# type: "module"
+# package: "RSVP List"
+# core_version_requirement: ^9 || ^10

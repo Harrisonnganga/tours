@@ -1,0 +1,5 @@
+name: "Form"
+description: "This is a test module for form"
+type: "module"
+package: "custom"
+core_version_requirement: ^9 || ^10

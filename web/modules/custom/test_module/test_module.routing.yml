@@ -1,0 +1,41 @@
+test_module.hello:
+  path: '/hello'
+  defaults:
+    _controller: '\Drupal\test_module\Controller\HelloController::hello'
+    _title: 'Hello'
+  requirements:
+    _permission: 'access content'
+
+test_module.hello_name:
+  path: '/hi/{first_name}/{last_name}'
+  defaults:
+    _controller: '\Drupal\test_module\Controller\HelloController::helloName'
+    _title: 'Hello'
+  requirements:
+    _permission: 'access content'
+
+test_module.product:
+  path: '/product/{name}/{size}/{colour}'
+  defaults:
+    _controller: '\Drupal\test_module\Controller\HelloController::hello'
+    _title: 'Product'
+    size: 'M'
+    colour: 'white'
+  requirements:
+    _permission: 'access content'
+
+test_module.goodbye:
+  path: '/goodbye'
+  defaults:
+    _controller: '\Drupal\test_module\Controller\HelloController::hello'
+    _title: 'Goodbye'
+  requirements:
+    _permission: 'access content'
+
+test_module.goodbye_name:
+  path: '/goodbye/{first_name}/{last_name}'
+  defaults:
+    _controller: '\Drupal\test_module\Controller\HelloController::hello'
+    _title: 'Goodbye name'
+  requirements:
+    _permission: 'access content'

@@ -1,0 +1,8 @@
+name: "demo block"
+description: "This is a test block"
+type: "module"
+package: "Training"
+core_version_requirement: ^9 || ^10
+dependencies:
+  - drupal:block
+

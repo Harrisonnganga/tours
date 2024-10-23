@@ -1,0 +1,48 @@
+my_form_demo.color_form:
+  path: '/color'
+  defaults:
+    _form: '\Drupal\my_form_demo\Form\ColorForm'
+    _title: 'Favourite Color'
+  requirements:
+    _permission: 'access content'
+
+my_form_demo.favourite_colour_route:
+  path: '/favourite-color/{fav}'
+  defaults:
+    _controller: '\Drupal\my_form_demo\Controller\FavouriteColorController::view'
+    _title: 'Favourite Color'
+  requirements:
+    _permission: 'access content'
+
+my_form_demo.christmas_dinner:
+  path: '/christmas-dinner'
+  defaults:
+    _controller: '\Drupal\my_form_demo\Controller\ChristmasDinnerController::content'
+    _title: 'Christmas Dinner Subscription'
+  requirements:
+    _permission: 'access content'
+
+my_form_demo.color:
+  path: '/my-form'
+  defaults:
+    _controller: '\Drupal\my_form_demo\Controller\ColorFormController::content'
+    _title: 'Color Form'
+  requirements:
+    _permission: 'access content'
+
+my_form_demo.color_form_block:
+  path: '/color'
+  defaults:
+    _block: 'color_form_block'
+    _title: 'Color Block'
+  requirements:
+    _permission: 'access content'
+
+my_form_demo.color_redirect:
+  path: '/colour'
+  defaults:
+    _controller: '\Drupal\my_form_demo\Controller\RedirectController::redirectToColor'
+    _title: 'Redirecting to Color'
+    url: 'color'
+  requirements:
+    _permission: 'access content'

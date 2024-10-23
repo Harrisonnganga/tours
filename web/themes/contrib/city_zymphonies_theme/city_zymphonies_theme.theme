@@ -1,0 +1,257 @@
+<?php
+
+/**
+ * @file
+ * Contains theme override functions and preprocess functions
+ */
+
+use Drupal\Core\Template\RenderWrapper;
+use Drupal\Core\Template\Attribute;
+use Drupal\search\Form\SearchBlockForm;
+use Drupal\Component\Utility\SafeMarkup;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\system\Form\ThemeSettingsForm;
+use Drupal\file\Entity\File;
+use Drupal\Core\Url;
+use Drupal\file\FileInterface;
+
+/**
+ * Implements hook_preprocess_page() for block templates.
+ */
+
+function city_zymphonies_theme_preprocess_page(&$variables) {
+
+  // Add responsive class
+  if (!empty($variables['page']['features_first']) && !empty($variables['page']['features_second']) && !empty($variables['page']['features_third'])) {
+    $variables['features_class'] = 'col-md-4';
+    $variables['features_first_class'] = 'col-md-4';
+  }
+  elseif((!empty($variables['page']['features_first']) && !empty($variables['page']['features_second'])) or (!empty($variables['page']['features_first']) && !empty($variables['page']['features_third'])) or (!empty($variables['page']['features_third']) && !empty($variables['page']['features_second']))) {
+    $variables['features_class'] = 'col-md-6';
+    $variables['features_first_class'] = 'col-md-6';
+  }
+  else {
+    $variables['features_class'] = 'col-md-12';
+  }
+
+
+  // Add responsive class.
+  if (!empty($variables['page']['footer_first']) && !empty($variables['page']['footer_second']) && !empty($variables['page']['footer_third'])) {
+    $variables['footer_class'] = 'col-md-4';
+  }
+  elseif((!empty($variables['page']['footer_first']) && !empty($variables['page']['footer_second'])) or (!empty($variables['page']['footer_first']) && !empty($variables['page']['footer_third'])) or (!empty($variables['page']['footer_third']) && !empty($variables['page']['footer_second']))) {
+    $variables['footer_class'] = 'col-md-6';
+  }
+  else {
+    $variables['footer_class'] = 'col-md-12';
+  }
+
+
+  // Add information about the number of sidebars.
+  if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
+    $variables['contentlayout'] = 'col-md-6';
+    $variables['sidebarfirst'] = 'col-md-3';
+    $variables['sidebarsecond'] = 'col-md-3';
+  }
+  elseif (!empty($variables['page']['sidebar_first'])) {
+    $variables['contentlayout'] = 'col-md-9 ';
+    $variables['sidebarfirst'] = 'col-md-3';
+  }
+  elseif (!empty($variables['page']['sidebar_second'])) {
+    $variables['contentlayout'] = 'col-md-9';
+    $variables['sidebarsecond'] = 'col-md-3';
+  }
+  else {
+    $variables['contentlayout'] = 'col-md-12';
+  }
+
+  // Social media global variable.
+  $variables['show_social_icon'] = theme_get_setting('show_social_icon');
+  $variables['facebook_url'] = theme_get_setting('facebook_url');
+  $variables['twitter_url'] = theme_get_setting('twitter_url');
+  $variables['linkedin_url'] = theme_get_setting('linkedin_url');
+  $variables['instagram_url'] = theme_get_setting('instagram_url');
+  $variables['rss_url'] = theme_get_setting('rss_url');
+  $variables['show_credit_link'] = theme_get_setting('show_credit_link');
+
+  // To get the current URL
+  $current_url  = \Drupal::request()->getRequestUri();
+  $current_path = parse_url($current_url);
+  // $variables['current_path'] = $current_path[2];
+  $variables['current_path'] = isset($current_path['path']) ? $current_path['path'] : FALSE;
+  
+  // Slider
+  // Assign Variable for slider
+  if ($variables['is_front']) {
+    if (theme_get_setting('show_slideshow','city_zymphonies_theme') == 1) {
+      $variables['show_slideshow'] = 1;
+      $variables['slider_content'] = city_zymphonies_theme_get_slider_content();
+    }
+  }
+
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function city_zymphonies_theme_preprocess_menu(&$variables, $hook) {
+  if ($hook == 'menu__main') { // We're doing that for main menu.
+    // Get the current path.
+    $current_path = \Drupal::request()->getRequestUri();
+    $items = $variables['items'];
+    foreach ($items as $key => $item) {
+      // If path is current_path, set active to li.
+      if ($item['url']->toString() == $current_path) {
+      // Add active link.
+      $variables['items'][$key]['attributes']['class'] = 'active';
+      }
+    }
+  }
+}
+
+/**
+ * Slider
+ * Implements custom function for get slider content.
+ */
+function city_zymphonies_theme_get_slider_content() {
+  $slider_content = [];
+  for ($i = 1; $i <= 1; $i++) {
+    $fid = theme_get_setting('slide_image_path'.$i,'city_zymphonies_theme');
+    if (!empty($fid)) {
+      $file = File::load($fid[0]);
+      $uri = $file->getFileUri();
+      $path = \Drupal::service('file_url_generator')->generateAbsoluteString($uri);
+    }
+    else {
+      $path = base_path() . \Drupal::service('extension.list.theme')->getPath('city_zymphonies_theme') . theme_get_setting('slide_image_path_' . $i, 'city_zymphonies_theme');
+    }
+    $slider_content[$i] = '<li>
+      <img src="' . $path . '" alt="Slider Banner" />
+      <div class="slider-caption">
+        <h2 class="slider-title">' . theme_get_setting('slide_title_' . $i, 'city_zymphonies_theme').'</h2>
+        <a href=' . theme_get_setting('slide_url_' . $i, 'city_zymphonies_theme') . ' class="more-link">Read more</a>
+      </div>
+    </li>';
+  }
+  return $slider_content;
+}
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function city_zymphonies_theme_form_system_theme_settings_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+
+  $form['city_zymphonies_theme_info'] = [
+    '#markup' => '<h2><br/>Advanced Theme Settings</h2><div class="messages messages--warning">Clear cache after making any changes in theme settings. <a href="../../config/development/performance">Click here to clear cache</a></div>'
+  ];
+  
+  //Slide show configure 
+  $form['city_zymphonies_theme_settings']['slideshow'] = [
+    '#type' => 'details',
+    '#title' => t('Front page Banner'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  ];
+  $form['city_zymphonies_theme_settings']['slideshow']['show_slideshow'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show Banner'),
+    '#default_value' => theme_get_setting('show_slideshow'),
+    '#description'   => t("Show/hide Banner in home page."),
+  ];
+  $form['city_zymphonies_theme_settings']['slideshow']['slide'] = [
+    '#markup' => t('Change the banner image, title, description and link using below fieldset.'),
+  ];
+  
+  for ($i = 1; $i <= 1; $i++) {
+    $form['city_zymphonies_theme_settings']['slideshow']['slide'. $i] = [
+      '#type' => 'details',
+      '#title' => t('Banner'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+    ];
+    $form['city_zymphonies_theme_settings']['slideshow']['slide' . $i]['slide_image_path' . $i] = [
+      '#type' => 'managed_file',
+      '#title' => t('Banner image'),
+      '#default_value' => theme_get_setting('slide_image_path'.$i,'city_zymphonies_theme'),
+      '#upload_location' => 'public://',
+    ];
+    $form['city_zymphonies_theme_settings']['slideshow']['slide' . $i]['slide_title_' . $i] = [
+      '#type' => 'textfield',
+      '#title' => t('Banner title'),
+      '#default_value' => theme_get_setting('slide_title_' . $i,'city_zymphonies_theme'),
+    ];
+    $form['city_zymphonies_theme_settings']['slideshow']['slide' . $i]['slide_url_' . $i] = [
+      '#type' => 'textfield',
+      '#title' => t('Banner URL'),
+      '#default_value' => theme_get_setting('slide_url_' . $i,'city_zymphonies_theme'),
+    ];
+
+    // Make the uploaded images permanent.
+    $image = theme_get_setting('slide_image_path'.$i,'city_zymphonies_theme');
+    if(!empty($image)){
+      $file = File::load($image[0]);
+      $file->setPermanent();
+      $file->save();
+      $file_usage = \Drupal::service('file.usage');
+      $file_usage_check = $file_usage->listUsage($file);
+      if (empty($file_usage_check)) {
+        $file_usage->add($file, 'city_zymphonies_theme', 'theme', $image[0]);
+      }
+    }
+
+  }
+
+  //Social Icon Link
+  $form['city_zymphonies_theme_settings']['social_icon'] = [
+    '#type' => 'details',
+    '#title' => t('Social media link'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  ];
+  $form['city_zymphonies_theme_settings']['social_icon']['show_social_icon'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Show Social Icons'),
+    '#default_value' => theme_get_setting('show_social_icon'),
+    '#description'   => t("Show/hide social media links."),
+  ];
+  $form['city_zymphonies_theme_settings']['social_icon']['facebook_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Facebook URL'),
+    '#default_value' => theme_get_setting('facebook_url'),
+  ];
+  $form['city_zymphonies_theme_settings']['social_icon']['twitter_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Twitter URL'),
+    '#default_value' => theme_get_setting('twitter_url'),
+  ];
+  $form['city_zymphonies_theme_settings']['social_icon']['linkedin_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('LinkedIn URL'),
+    '#default_value' => theme_get_setting('linkedin_url'),
+  ];
+  $form['city_zymphonies_theme_settings']['social_icon']['instagram_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Instagram URL'),
+    '#default_value' => theme_get_setting('instagram_url'),
+  ];
+  $form['city_zymphonies_theme_settings']['social_icon']['rss_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('RSS URL'),
+    '#default_value' => theme_get_setting('rss_url'),
+  ];
+
+  // Show/hide credit
+  $form['city_zymphonies_theme_settings']['credit_link'] = [
+    '#type' => 'details',
+    '#title' => t('Footer credit link'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  ];
+  $form['city_zymphonies_theme_settings']['credit_link']['show_credit_link'] = [
+    '#type' => 'checkbox',
+    '#title' => t("Show/hide 'Designed by Zymphonies' credit text."),
+    '#default_value' => theme_get_setting('show_credit_link'),
+    '#description'   => t("Highly recommend to display credit in footer."),
+  ];
+
+}

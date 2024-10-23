@@ -1,0 +1,65 @@
+name: City Zymphonies Theme
+type: theme
+description: 'Designed & Developed by <a href=https://www.zymphonies.com>Zymphonies</a><br/>Contact us for any kind of Drupal services <a href=mailto:info@zymphonies.com>info@zymphonies.com</a>'
+base theme: false
+core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
+
+# libraries
+libraries:
+  - city_zymphonies_theme/bootstrap
+  - city_zymphonies_theme/flexslider
+  - city_zymphonies_theme/fontawesome
+  - city_zymphonies_theme/smartmenus
+  - city_zymphonies_theme/owl
+  - city_zymphonies_theme/global-components
+
+# Regions
+regions:
+
+  # Top bar
+  email: 'Email'
+  header: 'Header'
+  search: 'Search'
+  primary_menu: 'Primary menu'
+
+  # top blocks
+  topblock1_image: 'Top block 1 image'
+  topblock1_desc: 'Top block 1 desc'
+
+  topblock2_image: 'Top block 2 image'
+  topblock2_desc: 'Top block 2 desc'
+
+  # Top message
+  top_message: 'Top message'
+
+  # Global region
+  highlighted: 'Highlighted' 
+  page_title: 'Page title'
+  breadcrumb: 'Breadcrumb'
+  content: 'Content'
+  sidebar_first: 'Left sidebar'
+  sidebar_second: 'Right sidebar'
+
+  products: 'Products'
+
+  # Features widgets
+  features_title: 'Features title'
+  features_first: 'Features widget first'
+  features_second: 'Features widget second'
+  features_third: 'Features widget third'
+
+  # Footer widgets
+  footer_title: 'Footer title'
+  footer_first: 'Footer widget first'
+  footer_second: 'Footer widget second'
+  footer_third: 'Footer widget third'
+
+  # Auto hidden
+  auto_hidden_block: 'Auto hidden blocks'
+
+
+# Information added by Drupal.org packaging script on 2024-01-12
+version: '3.0.1'
+project: 'city_zymphonies_theme'
+datestamp: 1705085498

@@ -1,0 +1,48 @@
+hello.block:
+  path: '/hello'
+  defaults:
+    _block: 'hello_block'
+    _title: 'Hello Block'
+  requirements:
+    _permission: 'access content'
+
+user.info:
+  path: '/user/info'
+  defaults:
+    _block: 'user_info_block'
+    _title: 'User Info'
+  requirements:
+    _permission: 'access content'
+
+date.block:
+  path: '/current-date'
+  defaults:
+    _block: 'date_block'
+    _title: 'Current Date'
+  requirements:
+    _permission: 'access content'
+
+bed.small:
+  path: '/bed/small'
+  defaults:
+    _controller: '\Drupal\my_block_demo\Controller\BedSizeController::small'
+    _title: 'Small Bed'
+  requirements:
+    _permission: 'access content'
+
+bed.medium:
+  path: '/bed/medium'
+  defaults:
+    _controller: '\Drupal\my_block_demo\Controller\BedSizeController::medium'
+    _title: 'Medium Bed'
+  requirements:
+    _permission: 'access content'
+
+bed.large:
+  path: '/bed/large'
+  defaults:
+    _controller: '\Drupal\my_block_demo\Controller\BedSizeController::large'
+    _title: 'Large Bed'
+  requirements:
+    _permission: 'access content'
+

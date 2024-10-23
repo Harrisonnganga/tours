@@ -1,0 +1,5 @@
+name: "art"
+description: "This is a test module for services"
+type: "module"
+package: "Training"
+core_version_requirement: ^9 || ^10

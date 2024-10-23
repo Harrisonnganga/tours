@@ -1,0 +1,6 @@
+my_form_demo.simplecontentpage:
+  title:   simple Content link
+  description: link to the simplecontent() method
+  route_name: my_form_demo.color
+  weight: 10
+  menu_name: main
